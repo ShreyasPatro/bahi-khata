@@ -1,0 +1,149 @@
+/*
+ * Bahi design tokens — the single source of truth for the visual system.
+ * Raw values live here once; components consume semantic tokens only
+ * (e.g. `bg-card`, `text-success`), never hex values.
+ */
+
+:root {
+  /* ── Brand palette (raw) ─────────────────────────────── */
+  --bahi-background: #f7f6f2;
+  --bahi-surface: #ffffff;
+  --bahi-primary: #6254d9;
+  --bahi-primary-dark: #40358f;
+  --bahi-text: #25233a;
+  --bahi-text-secondary: #858397; /* meta, hints, large/decorative text */
+  --bahi-success: #258653;
+  --bahi-expense: #c65353;
+  --bahi-border: #eae8f0;
+
+  /* Derived tints & accessible variants */
+  --bahi-text-muted: #6b6980; /* secondary body text; ≥4.5:1 on surface & background */
+  --bahi-primary-soft: #efedfc;
+  --bahi-success-soft: #e6f3ec;
+  --bahi-expense-soft: #faeded;
+  --bahi-warning: #8a5409;
+  --bahi-warning-soft: #fbf1df;
+  --bahi-success-ink: #1b6b41; /* success as text: ≥5:1 on surface and soft tint */
+  --bahi-expense-ink: #a63d3d; /* expense as text: ≥5:1 on surface and soft tint */
+  --bahi-surface-sunken: #f1f0ec;
+
+  /* ── Semantic tokens (shadcn contract + Bahi additions) ─ */
+  --background: var(--bahi-background);
+  --foreground: var(--bahi-text);
+  --card: var(--bahi-surface);
+  --card-foreground: var(--bahi-text);
+  --popover: var(--bahi-surface);
+  --popover-foreground: var(--bahi-text);
+  --primary: var(--bahi-primary);
+  --primary-foreground: #ffffff;
+  --primary-dark: var(--bahi-primary-dark);
+  --primary-soft: var(--bahi-primary-soft);
+  --secondary: var(--bahi-primary-soft);
+  --secondary-foreground: var(--bahi-primary-dark);
+  --muted: var(--bahi-surface-sunken);
+  --muted-foreground: var(--bahi-text-muted);
+  --subtle-foreground: var(--bahi-text-secondary);
+  --accent: var(--bahi-primary-soft);
+  --accent-foreground: var(--bahi-primary-dark);
+  --destructive: var(--bahi-expense);
+  --border: var(--bahi-border);
+  --input: var(--bahi-border);
+  --ring: var(--bahi-primary);
+
+  --success: var(--bahi-success);
+  --success-ink: var(--bahi-success-ink);
+  --success-soft: var(--bahi-success-soft);
+  --expense: var(--bahi-expense);
+  --expense-ink: var(--bahi-expense-ink);
+  --expense-soft: var(--bahi-expense-soft);
+  --warning: var(--bahi-warning);
+  --warning-soft: var(--bahi-warning-soft);
+
+  --sidebar: var(--bahi-surface);
+  --sidebar-foreground: var(--bahi-text);
+  --sidebar-primary: var(--bahi-primary);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--bahi-primary-soft);
+  --sidebar-accent-foreground: var(--bahi-primary-dark);
+  --sidebar-border: var(--bahi-border);
+  --sidebar-ring: var(--bahi-primary);
+
+  /* Chart series */
+  --chart-1: var(--bahi-primary);
+  --chart-2: #9a90ee;
+  --chart-3: var(--bahi-success);
+  --chart-4: #d9a441;
+  --chart-5: var(--bahi-expense);
+
+  /* ── Radii ───────────────────────────────────────────── */
+  --radius: 0.75rem;
+
+  /* ── Component heights ───────────────────────────────── */
+  --h-control-sm: 2rem; /* 32 */
+  --h-control-md: 2.5rem; /* 40 */
+  --h-control-lg: 2.75rem; /* 44 — minimum touch target */
+  --h-header: 3.5rem; /* 56 */
+  --h-bottom-nav: 4rem; /* 64 */
+  --w-sidebar: 16rem; /* 256 */
+  --w-right-panel: 20rem; /* 320 */
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --page-gutter: 1rem;
+  --page-max: 80rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --page-gutter: 2rem;
+  }
+}
+
+@theme {
+  /* Breakpoints: large phone, tablet, laptop, desktop */
+  --breakpoint-sm: 430px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1440px;
+
+  /* Typography scale */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-body-sm: 0.8125rem;
+  --text-body-sm--line-height: 1.25rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.5rem;
+  --text-title-sm: 1.0625rem;
+  --text-title-sm--line-height: 1.5rem;
+  --text-title: 1.25rem;
+  --text-title--line-height: 1.75rem;
+  --text-headline: 1.625rem;
+  --text-headline--line-height: 2rem;
+  --text-display-sm: 2rem;
+  --text-display-sm--line-height: 2.25rem;
+  --text-display: 2.5rem;
+  --text-display--line-height: 2.75rem;
+
+  /* Font weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(37 35 58 / 0.04), 0 1px 3px rgb(37 35 58 / 0.04);
+  --shadow-raised: 0 4px 12px rgb(37 35 58 / 0.07), 0 1px 3px rgb(37 35 58 / 0.05);
+  --shadow-overlay: 0 16px 40px rgb(37 35 58 / 0.16), 0 2px 8px rgb(37 35 58 / 0.08);
+  --shadow-nav: 0 -1px 0 rgb(37 35 58 / 0.04), 0 -8px 24px rgb(37 35 58 / 0.05);
+
+  /* Motion */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}

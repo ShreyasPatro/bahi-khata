@@ -5,3 +5,6 @@ import { afterEach } from 'vitest'
 afterEach(() => {
   cleanup()
 })
+
+// jsdom does not implement scrollTo; React Router's ScrollRestoration calls it.
+window.scrollTo = () => {}
