@@ -1,0 +1,38 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dev-dist
+coverage
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS-specific
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor-specific
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.sw?
+
+# Supabase local
+supabase/.branches
+supabase/.temp
+
+# Claude Code local settings
+.claude/settings.local.json
