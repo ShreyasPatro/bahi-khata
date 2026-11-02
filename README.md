@@ -37,11 +37,11 @@ src/
     design-preview/   Design-only screens and FICTIONAL seed data (removed as real features land)
   hooks/          Shared hooks
   lib/
-    supabase/     Supabase client (later)
+    supabase/     Typed Supabase client (client.ts) and database types (types.ts)
     utils/        cn() and other helpers
     validation/   Shared zod schemas
     accounting/   Ledger and accounting logic
-    env.ts        Validated environment variables
+    env.ts        Validated environment variables (fails fast, never logs values)
   services/       Shared services
   types/          Shared types
   constants/      Shared constants
@@ -49,11 +49,13 @@ src/
   assets/         Static assets imported by code
   test/           Vitest setup
 supabase/
-  migrations/     SQL migrations
+  config.toml     Supabase CLI configuration
+  migrations/     SQL migrations — the source of truth for the schema
   seed.sql        Seed data
   functions/      Edge functions
 public/icons/     PWA icons
-docs/             Project documentation
+docs/             Project documentation (see docs/INFRASTRUCTURE.md)
+scripts/          Developer scripts (check-supabase.mjs)
 ```
 
 Business logic lives in `features/*` and `lib/*`; `components/*` stays presentational and reusable.
@@ -129,14 +131,18 @@ npm install
 cp .env.example .env.local
 ```
 
-| Variable                 | Description                     |
-| ------------------------ | ------------------------------- |
-| `VITE_SUPABASE_URL`      | Your Supabase project URL       |
-| `VITE_SUPABASE_ANON_KEY` | Your Supabase anon (public) key |
+| Variable                 | Description                                                 |
+| ------------------------ | ----------------------------------------------------------- |
+| `VITE_SUPABASE_URL`      | Your Supabase project URL (`https://<ref>.supabase.co`)     |
+| `VITE_SUPABASE_ANON_KEY` | Your Supabase publishable key (or legacy anon key). Public. |
 
-Anything prefixed with `VITE_` is bundled into the browser build. Never put a service-role key or
-any other secret in a `VITE_` variable. `.env`, `.env.local` and other `.env.*` files are ignored
-by Git; only `.env.example` is tracked.
+Anything prefixed with `VITE_` is bundled into the browser build. Never put a service-role/secret
+key or any other secret in a `VITE_` variable. `.env`, `.env.local` and other `.env.*` files are
+ignored by Git; only `.env.example` is tracked.
+
+If either value is missing, malformed, or looks like a service-role key, the app shows a
+"Bahi can't start yet" screen naming the variable instead of loading. Values are never logged.
+Run `npm run check:supabase` to test the connection. Full setup: [docs/INFRASTRUCTURE.md](docs/INFRASTRUCTURE.md).
 
 ## Local development
 
@@ -147,15 +153,40 @@ npm run preview   # serve the production build locally
 
 ## Build and test commands
 
-| Command              | Purpose                          |
-| -------------------- | -------------------------------- |
-| `npm run dev`        | Vite dev server                  |
-| `npm run build`      | Typecheck, then production build |
-| `npm run preview`    | Preview the production build     |
-| `npm run lint`       | ESLint                           |
-| `npm run typecheck`  | `tsc -b` (strict)                |
-| `npm run test`       | Vitest (single run)              |
-| `npm run test:watch` | Vitest in watch mode             |
-| `npm run format`     | Prettier                         |
+| Command                  | Purpose                                             |
+| ------------------------ | --------------------------------------------------- |
+| `npm run dev`            | Vite dev server                                     |
+| `npm run build`          | Typecheck, then production build                    |
+| `npm run preview`        | Preview the production build                        |
+| `npm run lint`           | ESLint                                              |
+| `npm run typecheck`      | `tsc -b` (strict)                                   |
+| `npm run test`           | Vitest (single run)                                 |
+| `npm run test:watch`     | Vitest in watch mode                                |
+| `npm run format`         | Prettier                                            |
+| `npm run check:supabase` | Temporary Supabase connection test                  |
+| `npm run db:new <name>`  | Create a new SQL migration                          |
+| `npm run db:push`        | Apply pending migrations to the linked project      |
+| `npm run db:types`       | Regenerate TypeScript types from the linked project |
 
 Add shadcn/ui components with the official CLI, for example `npx shadcn@latest add dialog`.
+
+## Git workflow
+
+- `main` is the production branch and is always deployable. Do not commit to it directly once
+  the remote is set up; open a pull request instead.
+- Branch from `main` using `type/short-description`, for example `feat/khata-ledger` or
+  `fix/balance-rounding`.
+- Keep commits small and focused. Use the commit format `type: summary` (imperative, lower case):
+
+  | Type     | Use for                                       |
+  | -------- | --------------------------------------------- |
+  | `feat:`  | A new user-facing capability                  |
+  | `fix:`   | A bug fix                                     |
+  | `chore:` | Tooling, dependencies, config, infrastructure |
+  | `docs:`  | Documentation only                            |
+  | `test:`  | Adding or changing tests                      |
+
+- Before opening a pull request run `npm run typecheck && npm run lint && npm run test && npm run build`.
+- Schema changes go in a migration file in the same pull request as the code that needs them.
+- Never commit secrets. `.env*` files (except `.env.example`) are git-ignored; if a secret is ever
+  committed, rotate it immediately — deleting it from history is not enough.

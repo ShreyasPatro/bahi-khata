@@ -14,5 +14,10 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./src/test/setup.ts'],
     css: false,
+    // Dummy public values so the Supabase client can initialise; tests never use a real project.
+    env: {
+      VITE_SUPABASE_URL: 'https://test-project.supabase.co',
+      VITE_SUPABASE_ANON_KEY: 'test-publishable-key',
+    },
   },
 })
